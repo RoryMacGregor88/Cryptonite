@@ -5,4 +5,5 @@ A simple React build to learn more about data visualization and advanced React c
 
 Functional components
 Styled components
+CSS Grid
 Template Literals
