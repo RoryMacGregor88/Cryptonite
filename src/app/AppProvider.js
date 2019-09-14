@@ -6,14 +6,12 @@ export class AppProvider extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            page: 'dashboard'
+            page: 'dashboard',
+            setPage: this.setPage
          }
-    this.setPage = this.setPage.bind(this);
     }
 
-    setPage(page) {
-        this.setState({page})
-    }
+    setPage = (page) => { this.setState({page}) }
 
     render() { 
         return ( 
