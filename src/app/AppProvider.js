@@ -7,17 +7,40 @@ export class AppProvider extends Component {
         super(props);
         this.state = { 
             page: 'dashboard',
-            setPage: this.setPage
+            ...this.savedSettings(),
+            setPage: this.setPage,
+            confirmFavourites: this.confirmFavourites
          }
     }
 
-    setPage = (page) => { this.setState({page}) }
+confirmFavourites = () => {
+    this.setState({
+        firstVisit: false,
+        page: 'dashboard'
+    })
+    localStorage.setItem('cryptonite', JSON.stringify({
+        test: 'hello there'
+    }))
+}
 
-    render() { 
-        return ( 
-            <AppContext.Provider value={this.state}>
-                {this.props.children}
-            </AppContext.Provider>
-         );
+savedSettings() {
+    let cryptoniteData = JSON.parse(localStorage.getItem('cryptonite'))
+    if(!cryptoniteData) {
+        return {
+                page: 'settings', 
+                firstVisit: true
+                }
     }
+    return {}
+}
+
+setPage = (page) => { this.setState({page}) }
+
+render() { 
+    return ( 
+        <AppContext.Provider value={this.state}>
+            {this.props.children}
+        </AppContext.Provider>
+        );
+}
 }
