@@ -10,4 +10,4 @@ CSS Grid
 Template Literals
 Object Destructuring
 Local Storage
-
+CryptoCompare API
