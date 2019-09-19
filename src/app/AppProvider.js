@@ -8,7 +8,7 @@ export class AppProvider extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            page: 'dashboard',
+            page: 'Settings',
             ...this.savedSettings(),
             setPage: this.setPage,
             confirmFavourites: this.confirmFavourites
@@ -20,14 +20,14 @@ componentDidMount() {
 }
 
 fetchCoins = async () => {
-    let coinList = (await cc.coinList().Data);
-    this.setState({coinList});
+    let coinList = (await cc.coinList());
+    this.setState({coinList: coinList.Data});
 }
 
 confirmFavourites = () => {
     this.setState({
         firstVisit: false,
-        page: 'dashboard'
+        page: 'Dashboard'
     })
     localStorage.setItem('cryptonite', JSON.stringify({
         test: 'hello there'
@@ -38,7 +38,7 @@ savedSettings() {
     let cryptoniteData = JSON.parse(localStorage.getItem('cryptonite'))
     if(!cryptoniteData) {
         return {
-                page: 'settings', 
+                page: 'Settings', 
                 firstVisit: true
                 }
     }

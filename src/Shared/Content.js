@@ -1,19 +1,21 @@
 import React from 'react';
-import {AppContext} from "../App/AppProvider";
+import {AppContext} from '../App/AppProvider';
 
-export default function({name, children}) {
+export default function(props) {
     return (
         <AppContext.Consumer>
             {
-                ({page}) => {
-                    if (page !== name) {
+                ({coinList}) => {
+                    if(!coinList) {
                         return (
-                            <h1>hello</h1>
+                            <div>
+                                Loading coins...
+                            </div>
                         )
                     }
                     return (
                         <div>
-                            {children}
+                            {props.children}
                         </div>
                     )
                 }
