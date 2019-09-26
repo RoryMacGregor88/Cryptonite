@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 const cc = require('cryptocompare');
+const maxFavourites = 10;
 
 export const AppContext = React.createContext();
 
@@ -17,6 +19,9 @@ export class AppProvider extends Component {
             ],
             ...this.savedSettings(),
             setPage: this.setPage,
+            addCoin: this.addCoin,
+            removeCoin: this.removeCoin,
+            isInFavourites: this.isInFavourites,
             confirmFavourites: this.confirmFavourites
          }
     }
@@ -30,13 +35,34 @@ fetchCoins = async () => {
     this.setState({coinList: coinList.Data});
 }
 
+addCoin = (key) => {
+    let favourites = [...this.state.favourites];
+    if(favourites.length < maxFavourites) {
+        favourites.push(key);
+        this.setState({
+            favourites
+        })
+    }
+}
+
+removeCoin = (key) => {
+    let favourites = [...this.state.favourites];
+    this.setState({
+        favourites: _.pull(favourites, key)
+    })
+}
+
+isInFavourites = (key) => {
+   return  _.includes(this.state.favourites, key);
+}
+
 confirmFavourites = () => {
     this.setState({
         firstVisit: false,
         page: 'Dashboard'
     })
     localStorage.setItem('cryptonite', JSON.stringify({
-        test: 'hello there'
+        favourites: this.state.favourites
     }))
 }
 
@@ -46,18 +72,24 @@ savedSettings() {
         return {
                 page: 'Settings', 
                 firstVisit: true
-                }
+               }
     }
-    return {}
+    let {favourites} = cryptoniteData;
+    return {
+        favourites
+    }
 }
 
-setPage = (page) => { this.setState({page}) }
+setPage = (page) => { 
+    this.setState({page}) 
+}
 
 render() { 
     return ( 
         <AppContext.Provider value={this.state}>
             {this.props.children}
         </AppContext.Provider>
-        );
+    );
 }
+
 }

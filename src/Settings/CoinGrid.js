@@ -20,15 +20,17 @@ export default function ({topSection}) {
             {
                 ({coinList, favourites}) =>
                     <CoinGridStyled>
-                        {getCoinsToDisplay(coinList, topSection, favourites).map((coinKey) => {
-                            return (
-                                <CoinTile 
-                                    key={coinKey}
-                                    coinKey={coinKey} 
-                                    topSection={topSection}
-                                />
-                            )
-                        })}
+                        {   
+                            getCoinsToDisplay(coinList, topSection, favourites).map((coinKey) => {
+                                return (
+                                    <CoinTile 
+                                        key={coinKey}
+                                        coinKey={coinKey} 
+                                        topSection={topSection}
+                                    />
+                                )
+                            })
+                        }
                     </CoinGridStyled>
             }
         </AppContext.Consumer>
