@@ -9,6 +9,12 @@ export class AppProvider extends Component {
         super(props);
         this.state = { 
             page: 'Settings',
+            favourites: [
+                'BTC', 
+                'ETH', 
+                'XMR', 
+                'DOGE'
+            ],
             ...this.savedSettings(),
             setPage: this.setPage,
             confirmFavourites: this.confirmFavourites
