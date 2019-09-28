@@ -18,21 +18,48 @@ export class AppProvider extends Component {
                 'DOGE'
             ],
             ...this.savedSettings(),
-            setPage: this.setPage,
             addCoin: this.addCoin,
+            setPage: this.setPage,
             removeCoin: this.removeCoin,
             isInFavourites: this.isInFavourites,
+            setFilteredCoins: this.setFilteredCoins,
             confirmFavourites: this.confirmFavourites
          }
     }
 
 componentDidMount() {
     this.fetchCoins();
+    this.fetchPrices();
 }
 
 fetchCoins = async () => {
     let coinList = (await cc.coinList());
     this.setState({coinList: coinList.Data});
+}
+
+fetchPrices = async () => {
+    if(this.state.firstVisit) {
+        return;
+    }
+    let prices = await this.prices();
+    this.setState({
+        prices
+    })
+}
+
+prices = async () => {
+    let returnData = [];
+    const favourites = this.state.favourites;
+
+    for (let i = 0; i < favourites.length; i++) {
+        try {
+            let priceData = await cc.priceFull(favourites[i], 'GBP');
+            returnData.push(priceData);
+        } catch(err) {
+            console.warn("Fetch price error", err)
+        }
+    }
+    return returnData;
 }
 
 addCoin = (key) => {
@@ -60,7 +87,10 @@ confirmFavourites = () => {
     this.setState({
         firstVisit: false,
         page: 'Dashboard'
-    })
+    },
+        () => {this.fetchPrices()}
+    )
+
     localStorage.setItem('cryptonite', JSON.stringify({
         favourites: this.state.favourites
     }))
@@ -82,6 +112,12 @@ savedSettings() {
 
 setPage = (page) => { 
     this.setState({page}) 
+}
+
+setFilteredCoins = (filteredCoins) => {
+    this.setState({
+        filteredCoins
+    })
 }
 
 render() { 
